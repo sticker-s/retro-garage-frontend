@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import AddPartForm from "./components/AddPartForm";
+import InventoryList from "./components/InventoryList";
 import './App.css';
 function App() {
 
@@ -68,26 +70,11 @@ function App() {
     <div className="app-container">
       <h1 style={{ fontFamily: 'monospace' }}>Pixel Garage Inventory</h1>
 
-      <div>
-        <input
-          type="text"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          placeholder="Enter a part..."
-        />
+      {/* //* this is the form for adding the parts */}
+      <AddPartForm inputValue={inputValue} setInputValue={setInputValue} onAdd={addParts} />
 
-        <button onClick={addParts}>Add Part</button>
-      </div>
-
-      <ul>
-        {inventory.map((part, index) => (
-          <li key={index} style={{ fontFamily: 'monospace', margin: '10px 0' }}>
-            {part}
-            <button onClick={() => editPart(part)} style={{ marginLeft: '10px' }}>  Edit</button>
-            <button onClick={() => deletePart(part)} style={{ marginLeft: '5px' }}> X</button>
-          </li>
-        ))}
-      </ul>
+      {/* //* this creates the ul of each parts */}
+      <InventoryList inventory={inventory} editPart={editPart} deletePart={deletePart} />
     </div>
   )
 }
