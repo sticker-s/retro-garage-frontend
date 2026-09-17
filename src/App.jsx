@@ -6,7 +6,8 @@ function App() {
 
   const [inventory, setInventory] = useState([]);
   const [inputValue, setInputValue] = useState("");
-  const API_URL = "https://retro-garage-backend.onrender.com/api/parts";
+  // const API_URL = "https://retro-garage-backend.onrender.com/api/parts";
+  const API_URL = "http://localhost:3000/api/parts";
 
   useEffect(() => {
     fetchInventory();
@@ -39,21 +40,20 @@ function App() {
     }
   };
 
-  const deletePart = async (partName) => {
+  const deletePart = async (id) => {
     try {
-      await fetch(`${API_URL}/${partName}`, { method: 'DELETE' });
+      await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
       fetchInventory();
     } catch (error) {
       console.error("Error deleting Part");
     }
   }
 
-  const editPart = async (oldName) => {
+  const editPart = async (id, oldName) => {
     const newName = prompt("Enter a new name for this part: ", oldName);
     if (newName && newName !== oldName) {
       try {
-
-        await fetch(`${API_URL}/${oldName}`, {
+        await fetch(`${API_URL}/${id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ newName: newName })
