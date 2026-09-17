@@ -6,6 +6,8 @@ function App() {
 
   const [inventory, setInventory] = useState([]);
   const [inputValue, setInputValue] = useState("");
+  const [price, setPrice] = useState(0);
+  const [quantity, setQuantity] = useState(1);
   // const API_URL = "https://retro-garage-backend.onrender.com/api/parts";
   const API_URL = "http://localhost:3000/api/parts";
 
@@ -26,14 +28,21 @@ function App() {
 
   const addParts = async () => {
     if (!inputValue) return alert("please enter a part name");
-
+    if (price <= 0) return alert("price must be > 0");
+    if (quantity <= 0) return alert("quantity must be > 0");
     try {
       await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ newPart: inputValue })
+        body: JSON.stringify({
+          newPart: inputValue,
+          price: price,
+          quantity: quantity
+        })
       });
       setInputValue("");
+      setPrice(0);
+      setQuantity(1);
       fetchInventory();
     } catch (error) {
       console.error("Error adding parts");
@@ -71,7 +80,8 @@ function App() {
       <h1 style={{ fontFamily: 'monospace' }}>Pixel Garage Inventory</h1>
 
       {/* //* this is the form for adding the parts */}
-      <AddPartForm inputValue={inputValue} setInputValue={setInputValue} onAdd={addParts} />
+      <AddPartForm inputValue={inputValue} setInputValue={setInputValue} onAdd={addParts}
+        price={price} setprice={setPrice} quantity={quantity} setQuantity={setQuantity} />
 
       {/* //* this creates the ul of each parts */}
       <InventoryList inventory={inventory} editPart={editPart} deletePart={deletePart} />
