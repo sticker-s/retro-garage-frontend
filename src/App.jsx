@@ -35,7 +35,7 @@ function App() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          newPart: inputValue,
+          newPartName: inputValue,
           price: price,
           quantity: quantity
         })
@@ -58,21 +58,26 @@ function App() {
     }
   }
 
-  const editPart = async (id, oldName) => {
-    const newName = prompt("Enter a new name for this part: ", oldName);
-    if (newName && newName !== oldName) {
-      try {
-        await fetch(`${API_URL}/${id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ newName: newName })
-        });
-        fetchInventory();
+  const editPart = async (id, oldName, oldPrice, oldQuantity) => {
+    // const newName = prompt("Updated name: ", oldName) || oldName;
+    // const newPrice = prompt("Updated price: ", oldPrice) || oldPrice;
+    // const newQuantity = prompt("Updated quantity: ", oldQuantity) || oldQuantity;
+    try {
+      await fetch(`${API_URL}/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          newName: oldName,
+          newPrice: Number(oldPrice),
+          newQuantity: Number(oldQuantity)
+        })
+      });
+      fetchInventory();
 
-      } catch (error) {
-        console.error("error updating part");
-      }
+    } catch (error) {
+      console.error("error updating part");
     }
+
   };
 
   return (
