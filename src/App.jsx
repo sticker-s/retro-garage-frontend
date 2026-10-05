@@ -8,9 +8,9 @@ function App() {
   const [inputValue, setInputValue] = useState("");
   const [price, setPrice] = useState(0);
   const [quantity, setQuantity] = useState(1);
+  const [searchItem, setSearchItem] = useState("");
   // const API_URL = "https://retro-garage-backend.onrender.com/api/parts";
-  const API_URL = "http://localhost:3000/api/parts";
-
+  const API_URL = import.meta.env.VITE_URL || "http://localhost:3000/api/parts";
   useEffect(() => {
     fetchInventory();
   }, []);
@@ -58,18 +58,15 @@ function App() {
     }
   }
 
-  const editPart = async (id, oldName, oldPrice, oldQuantity) => {
-    // const newName = prompt("Updated name: ", oldName) || oldName;
-    // const newPrice = prompt("Updated price: ", oldPrice) || oldPrice;
-    // const newQuantity = prompt("Updated quantity: ", oldQuantity) || oldQuantity;
+  const editPart = async (id, updatedName, updatedPrice, updatedQuantity) => {
     try {
       await fetch(`${API_URL}/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          newName: oldName,
-          newPrice: Number(oldPrice),
-          newQuantity: Number(oldQuantity)
+          newName: updatedName,
+          newPrice: Number(updatedPrice),
+          newQuantity: Number(updatedQuantity)
         })
       });
       fetchInventory();
@@ -77,19 +74,25 @@ function App() {
     } catch (error) {
       console.error("error updating part");
     }
-
   };
+
+  const filteredInventory = inventory.filter((part) => part.name.toLowerCase().includes(searchItem.toLowerCase()));
+
 
   return (
     <div className="app-container">
       <h1 style={{ fontFamily: 'monospace' }}>Pixel Garage Inventory</h1>
+      {/* //* the filter search bar */}
+      <input type="text" onChange={(e) => setSearchItem(e.target.value)} placeholder="filer search"
+        value={searchItem} style={{ width: "50%", marginBottom: "20px", padding: "5px" }} />
+
 
       {/* //* this is the form for adding the parts */}
       <AddPartForm inputValue={inputValue} setInputValue={setInputValue} onAdd={addParts}
         price={price} setprice={setPrice} quantity={quantity} setQuantity={setQuantity} />
 
       {/* //* this creates the ul of each parts */}
-      <InventoryList inventory={inventory} editPart={editPart} deletePart={deletePart} />
+      <InventoryList inventory={filteredInventory} editPart={editPart} deletePart={deletePart} />
     </div>
   )
 }
