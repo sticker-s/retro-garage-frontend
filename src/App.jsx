@@ -88,10 +88,43 @@ function App() {
       return 0;
     });
 
+  const totalValuation = inventory.reduce((sum, part) => sum + (part.price * part.quantity), 0);
+  const totalQuantity = inventory.reduce((sum, part) => sum + Number(part.quantity), 0);
+
+
+
 
   return (
     <div className="app-container">
       <h1 style={{ fontFamily: 'monospace' }}>Pixel Garage Inventory</h1>
+      {/* //* dashboard */}
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        background: '#1a1a1a',
+        color: '#fff',
+        padding: '15px 20px',
+        borderRadius: '8px',
+        marginBottom: '20px',
+        fontFamily: 'monospace',
+        border: '1px solid #333'
+      }}>
+        <div>
+          <span style={{ fontSize: '12px', color: '#888', display: 'block' }}>Total Valuation</span>
+          <span style={{ fontSize: '20px', color: '#00e5ff', fontWeight: 'bold' }}>${totalValuation.toLocaleString()}</span>
+        </div>
+        <div>
+          <span style={{ fontSize: '12px', color: '#888', display: 'block' }}>Items in Stock</span>
+          <span style={{ fontSize: '20px', color: '#7b2fff', fontWeight: 'bold' }}>{totalQuantity}</span>
+        </div>
+        <div>
+          <span style={{ fontSize: '12px', color: '#888', display: 'block' }}>Unique Parts</span>
+          <span style={{ fontSize: '20px', color: '#5dce9e', fontWeight: 'bold' }}>{inventory.length}</span>
+        </div>
+
+      </div>
+
+
       {/* //* the filter search bar */}
       <input type="text" onChange={(e) => setSearchItem(e.target.value)} placeholder="filer search"
         value={searchItem} style={{ width: "50%", marginBottom: "20px", padding: "5px" }} />
